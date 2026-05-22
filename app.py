@@ -1,122 +1,5 @@
-# import streamlit as st
-# import pdfplumber
-# import requests
-# import os
 
-# # =====================
-# # CONFIG
-# # =====================
-# OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "YOUR_API_KEY")
-
-# st.set_page_config(page_title="Tendly", layout="wide")
-
-# st.title("📑 Tendly")
-# st.subheader("AI Tender Intelligence Platform")
-
-# # =====================
-# # FILE UPLOAD
-# # =====================
-# uploaded_file = st.file_uploader(
-#     "Upload Tender Document",
-#     type=["pdf"]
-# )
-
-# # =====================
-# # PDF TEXT EXTRACTION
-# # =====================
-# def extract_full_pdf_text(file):
-#     full_text = ""
-    
-#     with pdfplumber.open(file) as pdf:
-#         for i, page in enumerate(pdf.pages):
-#             text = page.extract_text()
-
-#             if text:
-#                 full_text += f"\n\n--- PAGE {i+1} ---\n\n{text}"
-#             else:
-#                 full_text += f"\n\n--- PAGE {i+1} (NO TEXT FOUND) ---\n\n"
-
-#     return full_text
-
-# # =====================
-# # MAIN LOGIC
-# # =====================
-# if uploaded_file:
-
-#     st.info("Reading PDF...")
-
-#     full_text = extract_full_pdf_text(uploaded_file)
-
-#     st.success("Tender Uploaded Successfully")
-
-#     st.write("## 📄 Extracted Tender Text")
-
-#     st.text_area(
-#         "Tender Content (Full)",
-#         full_text,
-#         height=400
-#     )
-
-#     st.write(f"📊 Total characters extracted: {len(full_text)}")
-
-#     # =====================
-#     # AI ANALYSIS BUTTON
-#     # =====================
-#     if st.button("Generate AI Summary"):
-
-#         if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "YOUR_API_KEY":
-#             st.error("⚠️ Please set your OpenRouter API key")
-#             st.stop()
-
-#         prompt = f"""
-#         Analyze this tender document and provide:
-
-#         1. Tender Summary
-#         2. Scope of Work
-#         3. Eligibility Criteria
-#         4. Important Dates
-#         5. Risks
-#         6. Submission Requirements
-
-#         Tender Document:
-#         {full_text[:10000]}
-#         """
-
-#         with st.spinner("Analyzing tender with AI..."):
-
-#             try:
-#                 response = requests.post(
-#                     url="https://openrouter.ai/api/v1/chat/completions",
-#                     headers={
-#                         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-#                         "Content-Type": "application/json",
-#                     },
-#                     json={
-#                         "model": "openai/gpt-3.5-turbo",
-#                         "messages": [
-#                             {"role": "user", "content": prompt}
-#                         ]
-#                     },
-#                     timeout=60
-#                 )
-
-#                 result = response.json()
-
-#                 # =====================
-#                 # SAFE RESPONSE HANDLING
-#                 # =====================
-#                 if "choices" in result:
-#                     ai_output = result["choices"][0]["message"]["content"]
-#                     st.write("## 🤖 AI Analysis")
-#                     st.write(ai_output)
-#                 else:
-#                     st.error("API Error:")
-#                     st.json(result)
-
-#             except Exception as e:
-#                 st.error(f"Request failed: {str(e)}")
-
-
+# Tendly V3
 
 import streamlit as st
 import pdfplumber
@@ -136,215 +19,281 @@ st.set_page_config(
 )
 
 # =====================
-# CUSTOM CSS
+# CUSTOM CSS — Egis Brand Guidelines
+# Colours: Midnight Blue #09212c · Teal/Blue320 #009aa6
+#          Egis Green #abc022 · Steel Grey #5d858b
+# Font: Segoe UI (internal use standard per brand guide)
 # =====================
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Background */
+/* ── Background: Midnight Blue ── */
 .stApp {
-    background: #0e0f13;
-    color: #e8e4dc;
+    background: #09212c;
+    color: #e8f0f2;
 }
 
-/* Header */
-.tendly-header {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 4px;
+/* ── Top header bar — Egis midnight blue banner style ── */
+.egis-topbar {
+    background: #09212c;
+    border-bottom: 3px solid #abc022;
+    padding: 1.2rem 0 1rem 0;
+    margin-bottom: 0;
 }
-.tendly-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 3rem;
-    color: #e8e4dc;
-    letter-spacing: -1px;
+.egis-wordmark {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 300;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     line-height: 1;
 }
-.tendly-tag {
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 3px;
+.egis-e {
+    color: #abc022;
+    font-weight: 700;
+}
+.egis-product {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    color: #c8a96e;
-    border: 1px solid #c8a96e44;
-    padding: 3px 10px;
-    border-radius: 2px;
-    margin-left: 4px;
-    vertical-align: middle;
+    color: #009aa6;
+    margin-top: 2px;
 }
-.tendly-sub {
-    font-size: 0.95rem;
-    color: #7a7a7a;
-    margin-bottom: 2rem;
-    font-weight: 300;
+.egis-signature {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #5d858b;
+    margin-top: 6px;
+}
+.egis-signature span {
+    color: #abc022;
+    font-style: italic;
 }
 
-/* Divider */
-.gold-divider {
+/* ── Divider: Egis green ── */
+.egis-divider {
+    height: 2px;
+    background: linear-gradient(90deg, #abc022 0%, #009aa6 60%, transparent 100%);
+    margin: 1.2rem 0;
+}
+.egis-divider-thin {
     height: 1px;
-    background: linear-gradient(90deg, #c8a96e, transparent);
-    margin: 1.5rem 0;
+    background: linear-gradient(90deg, #009aa6 0%, transparent 100%);
+    margin: 1rem 0;
 }
 
-/* Cards */
+/* ── Cards ── */
 .analysis-card {
-    background: #161820;
-    border: 1px solid #2a2c35;
-    border-radius: 8px;
-    padding: 1.5rem;
+    background: #0d2d3a;
+    border: 1px solid #1a4a5a;
+    border-radius: 4px;
+    padding: 1.4rem;
     margin-bottom: 1rem;
     transition: border-color 0.2s;
 }
 .analysis-card:hover {
-    border-color: #c8a96e55;
+    border-color: #009aa6;
 }
 .card-icon {
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
 }
 .card-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.1rem;
-    color: #c8a96e;
-    margin-bottom: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #009aa6;
+    margin-bottom: 0.6rem;
 }
 .card-body {
-    font-size: 0.9rem;
-    color: #b8b8b8;
-    line-height: 1.7;
+    font-size: 0.88rem;
+    color: #97b8bb;
+    line-height: 1.75;
 }
 
-/* Risk badges */
-.risk-high   { color: #e05c5c; background: #e05c5c18; border: 1px solid #e05c5c44; padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
-.risk-medium { color: #e09a3a; background: #e09a3a18; border: 1px solid #e09a3a44; padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
-.risk-low    { color: #4caf78; background: #4caf7818; border: 1px solid #4caf7844; padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+/* ── Risk badges ── */
+.risk-high   { color: #e05c5c; background: #e05c5c15; border: 1px solid #e05c5c55; padding: 3px 12px; border-radius: 2px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.risk-medium { color: #e09a3a; background: #e09a3a15; border: 1px solid #e09a3a55; padding: 3px 12px; border-radius: 2px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.risk-low    { color: #abc022; background: #abc02215; border: 1px solid #abc02255; padding: 3px 12px; border-radius: 2px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 
-/* Stat boxes */
+/* ── Stat boxes ── */
 .stat-row {
     display: flex;
-    gap: 12px;
-    margin-bottom: 1.5rem;
+    gap: 10px;
+    margin-bottom: 1.4rem;
     flex-wrap: wrap;
 }
 .stat-box {
     flex: 1;
-    min-width: 120px;
-    background: #161820;
-    border: 1px solid #2a2c35;
-    border-radius: 6px;
+    min-width: 110px;
+    background: #0d2d3a;
+    border: 1px solid #1a4a5a;
+    border-top: 3px solid #009aa6;
+    border-radius: 2px;
     padding: 1rem;
     text-align: center;
 }
 .stat-value {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    color: #c8a96e;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: #abc022;
+    line-height: 1;
 }
 .stat-label {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #555;
-    margin-top: 4px;
+    letter-spacing: 2px;
+    color: #5d858b;
+    margin-top: 5px;
 }
 
-/* Upload area */
+/* ── Upload area ── */
 .stFileUploader > div {
-    border: 1px dashed #3a3c47 !important;
-    border-radius: 8px !important;
-    background: #13141a !important;
+    border: 1px dashed #1a4a5a !important;
+    border-radius: 4px !important;
+    background: #0d2d3a !important;
 }
 
-/* Buttons */
+/* ── Buttons: Egis Teal ── */
 .stButton > button {
-    background: #c8a96e !important;
-    color: #0e0f13 !important;
+    background: #009aa6 !important;
+    color: #ffffff !important;
     border: none !important;
-    font-family: 'DM Sans', sans-serif !important;
+    font-family: 'Segoe UI', sans-serif !important;
     font-weight: 600 !important;
-    letter-spacing: 0.5px !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
     padding: 0.6rem 2rem !important;
-    border-radius: 4px !important;
-    transition: opacity 0.2s !important;
+    border-radius: 2px !important;
+    transition: background 0.2s !important;
 }
 .stButton > button:hover {
-    opacity: 0.85 !important;
+    background: #00617e !important;
 }
 
-/* Tabs */
+/* ── Download button: Egis Green ── */
+.stDownloadButton > button {
+    background: transparent !important;
+    color: #abc022 !important;
+    border: 1px solid #abc022 !important;
+    font-family: 'Segoe UI', sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    font-size: 0.78rem !important;
+    padding: 0.5rem 1.5rem !important;
+    border-radius: 2px !important;
+}
+.stDownloadButton > button:hover {
+    background: #abc02220 !important;
+}
+
+/* ── Tabs ── */
 .stTabs [data-baseweb="tab-list"] {
     background: transparent;
-    border-bottom: 1px solid #2a2c35;
+    border-bottom: 1px solid #1a4a5a;
     gap: 0;
 }
 .stTabs [data-baseweb="tab"] {
     background: transparent !important;
-    color: #7a7a7a !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 0.85rem !important;
-    letter-spacing: 0.5px !important;
-    padding: 0.6rem 1.2rem !important;
-    border-bottom: 2px solid transparent !important;
+    color: #5d858b !important;
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    padding: 0.7rem 1.2rem !important;
+    border-bottom: 3px solid transparent !important;
 }
 .stTabs [aria-selected="true"] {
-    color: #c8a96e !important;
-    border-bottom-color: #c8a96e !important;
+    color: #009aa6 !important;
+    border-bottom-color: #abc022 !important;
 }
 
-/* Chat */
+/* ── Chat bubbles ── */
 .chat-bubble-user {
-    background: #1e2028;
-    border: 1px solid #2a2c35;
-    border-radius: 8px 8px 2px 8px;
+    background: #0d2d3a;
+    border: 1px solid #1a4a5a;
+    border-right: 3px solid #009aa6;
+    border-radius: 4px 2px 4px 4px;
     padding: 0.8rem 1rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    color: #e8e4dc;
+    margin-bottom: 0.6rem;
+    font-size: 0.88rem;
+    color: #e8f0f2;
     text-align: right;
 }
 .chat-bubble-ai {
-    background: #161820;
-    border: 1px solid #2a2c35;
-    border-left: 3px solid #c8a96e;
-    border-radius: 2px 8px 8px 8px;
+    background: #061820;
+    border: 1px solid #1a4a5a;
+    border-left: 3px solid #abc022;
+    border-radius: 2px 4px 4px 4px;
     padding: 0.8rem 1rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    color: #b8b8b8;
-    line-height: 1.7;
+    margin-bottom: 0.6rem;
+    font-size: 0.88rem;
+    color: #97b8bb;
+    line-height: 1.75;
 }
 
-/* Text areas and inputs */
+/* ── Inputs ── */
 .stTextArea textarea, .stTextInput input {
-    background: #13141a !important;
-    border: 1px solid #2a2c35 !important;
-    color: #e8e4dc !important;
-    font-family: 'DM Sans', sans-serif !important;
-    border-radius: 6px !important;
+    background: #0d2d3a !important;
+    border: 1px solid #1a4a5a !important;
+    color: #e8f0f2 !important;
+    font-family: 'Segoe UI', sans-serif !important;
+    border-radius: 2px !important;
+}
+.stTextArea textarea:focus, .stTextInput input:focus {
+    border-color: #009aa6 !important;
 }
 
-/* Spinner */
+/* ── Spinner ── */
 .stSpinner > div {
-    border-top-color: #c8a96e !important;
+    border-top-color: #abc022 !important;
 }
 
-/* Success/info/error */
-.stSuccess, .stInfo, .stError {
-    border-radius: 6px !important;
+/* ── Info/help box ── */
+.info-box {
+    background: #0d2d3a;
+    border: 1px solid #1a4a5a;
+    border-left: 3px solid #009aa6;
+    border-radius: 2px;
+    padding: 1rem 1.2rem;
+    font-size: 0.82rem;
+    color: #97b8bb;
+    line-height: 1.9;
+}
+.info-box strong {
+    color: #abc022;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
-/* Sidebar */
+/* ── Sidebar ── */
 section[data-testid="stSidebar"] {
-    background: #0a0b0e !important;
+    background: #061820 !important;
 }
 
-/* Hide streamlit branding */
+/* ── Expander ── */
+.streamlit-expanderHeader {
+    background: #0d2d3a !important;
+    color: #97b8bb !important;
+    font-size: 0.82rem !important;
+    font-family: 'Segoe UI', sans-serif !important;
+}
+
+/* ── Hide Streamlit branding ── */
 #MainMenu, footer, header { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
@@ -353,12 +302,12 @@ section[data-testid="stSidebar"] {
 # HEADER
 # =====================
 st.markdown("""
-<div class="tendly-header">
-    <span class="tendly-logo">Tendly</span>
-    <span class="tendly-tag">AI Intelligence</span>
+<div class="egis-topbar">
+    <div class="egis-wordmark"><span class="egis-e">e</span>gis <span style="font-weight:200; font-size:1.6rem; color:#97b8bb; letter-spacing:4px;">· TENDLY</span></div>
+    <div class="egis-product">AI Tender Intelligence Platform</div>
+    <div class="egis-signature">IMAGINE. CREATE. <span>ACHIEVE.</span></div>
 </div>
-<div class="tendly-sub">Upload a tender document and get structured AI analysis in seconds.</div>
-<div class="gold-divider"></div>
+<div class="egis-divider"></div>
 """, unsafe_allow_html=True)
 
 # =====================
@@ -538,14 +487,14 @@ with col_upload:
 
 with col_info:
     st.markdown("""
-    <div style="padding: 1rem; background: #13141a; border-radius: 8px; border: 1px solid #2a2c35; font-size: 0.82rem; color: #7a7a7a; line-height: 1.8;">
-    <strong style="color: #c8a96e;">What Tendly analyses:</strong><br>
-    📌 Scope & deliverables<br>
-    ✅ Eligibility & compliance<br>
-    📅 Critical dates<br>
-    ⚠️ Risks & red flags<br>
+    <div class="info-box">
+    <strong>What Tendly analyses</strong>
+    📌 Scope &amp; deliverables<br>
+    ✅ Eligibility &amp; compliance<br>
+    📅 Critical dates &amp; deadlines<br>
+    ⚠️ Risks &amp; red flags<br>
     📋 Submission requirements<br>
-    🎯 Go/No-Go recommendation
+    🎯 Go / No-Go recommendation
     </div>
     """, unsafe_allow_html=True)
 
@@ -565,7 +514,7 @@ if uploaded_file:
     full_text = st.session_state.full_text
     _, stats = extract_full_pdf_text(uploaded_file)
 
-    st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="egis-divider"></div>', unsafe_allow_html=True)
 
     # Stats row
     st.markdown(f"""
@@ -612,7 +561,7 @@ if uploaded_file:
     if st.session_state.analysis:
         a = st.session_state.analysis
 
-        st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="egis-divider"></div>', unsafe_allow_html=True)
 
         tab1, tab2, tab3, tab4, tab5 = st.tabs([
             "📋 Overview", "📐 Scope & Eligibility",
@@ -657,7 +606,7 @@ if uploaded_file:
             # Recommendation
             rec = a.get("recommendation", "")
             st.markdown(f"""
-            <div class="analysis-card" style="border-left: 3px solid #c8a96e;">
+            <div class="analysis-card" style="border-left: 3px solid #abc022;">
                 <div class="card-icon">🎯</div>
                 <div class="card-title">Recommendation</div>
                 <div class="card-body">{rec}</div>
@@ -703,7 +652,7 @@ if uploaded_file:
                     <div style="display:flex; justify-content:space-between; align-items:center;
                                 padding: 0.7rem 0; border-bottom: 1px solid #2a2c35;">
                         <span style="color:#7a7a7a; font-size:0.85rem;">{d['label']}</span>
-                        <span style="color:#c8a96e; font-size:0.9rem; font-weight:500;">{d['date']}</span>
+                        <span style="color:#abc022; font-size:0.9rem; font-weight:500;">{d['date']}</span>
                     </div>"""
                 st.markdown(f"""
                 <div class="analysis-card">
@@ -750,7 +699,7 @@ if uploaded_file:
         # ── TAB 5: CHAT ───────────────────────────────────────
         with tab5:
             st.markdown("""
-            <div style="font-size:0.85rem; color:#7a7a7a; margin-bottom:1rem;">
+            <div style="font-size:0.85rem; color:#5d858b; margin-bottom:1rem;">
             Ask any question about this tender — deadlines, clauses, requirements, strategy.
             </div>
             """, unsafe_allow_html=True)
@@ -789,7 +738,7 @@ if uploaded_file:
                         st.error(f"Error: {e}")
 
         # ── EXPORT ────────────────────────────────────────────
-        st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="egis-divider"></div>', unsafe_allow_html=True)
         report_text = export_report(a, st.session_state.filename)
         st.download_button(
             label="⬇ Download Analysis Report (.txt)",
@@ -809,13 +758,16 @@ if uploaded_file:
 
 else:
     st.markdown("""
-    <div style="text-align:center; padding: 4rem 2rem; color: #3a3c47;">
+    <div style="text-align:center; padding: 4rem 2rem; color: #1a4a5a;">
         <div style="font-size: 3rem; margin-bottom: 1rem;">📑</div>
-        <div style="font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: #555; margin-bottom: 0.5rem;">
+        <div style="font-size: 1.2rem; color: #5d858b; margin-bottom: 0.5rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 300;">
             Upload a tender PDF to begin
         </div>
-        <div style="font-size: 0.85rem; color: #3a3c47;">
-            Supports government tenders, RFPs, EOIs, and procurement documents
+        <div style="font-size: 0.8rem; color: #1a4a5a; letter-spacing: 1px;">
+            Supports government tenders · RFPs · EOIs · Procurement documents
+        </div>
+        <div style="margin-top: 2rem; font-size: 0.7rem; letter-spacing: 3px; color: #1a4a5a; text-transform: uppercase;">
+            IMAGINE. CREATE. ACHIEVE.
         </div>
     </div>
     """, unsafe_allow_html=True)
