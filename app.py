@@ -1,4 +1,3 @@
-
 # ╔══════════════════════════════════════════════════════════════════════════╗
 # ║            TENDLY  v5  ·  Egis AI Tender Intelligence Platform          ║
 # ║            Internal Operations Tool  ·  Production Build                ║
@@ -115,6 +114,18 @@ STYLES = """
   --surface-1:  #0C2A38;
   --surface-2:  #0F3040;
   --surface-3:  #122E3C;
+}
+
+/* ── Streamlit Cloud table border reset ──────── */
+.stMarkdown table,
+.stMarkdown table td,
+.stMarkdown table th,
+[data-testid="stMarkdownContainer"] table,
+[data-testid="stMarkdownContainer"] table td,
+[data-testid="stMarkdownContainer"] table th {
+  border: none !important;
+  border-collapse: collapse !important;
+  background: transparent !important;
 }
 
 /* ── Base ─────────────────────────────────────── */
@@ -1804,40 +1815,30 @@ with st.sidebar:
     st.markdown('<div class="divider-thin"></div>', unsafe_allow_html=True)
     st.markdown(f"""
     <div style="padding:0.4rem 0 0.6rem;">
-      <table style="width:100%;border-collapse:collapse;">
-        <tr>
-          <td style="font-size:0.54rem;color:#1C4055;letter-spacing:0.8px;text-transform:uppercase;
-                     padding:0.22rem 0;vertical-align:top;white-space:nowrap;padding-right:0.6rem;
-                     width:38%;">
-            Model
-          </td>
-          <td style="font-size:0.6rem;color:#1C4055;padding:0.22rem 0;line-height:1.4;
-                     word-break:break-all;">
-            {CFG.OPENROUTER_MODEL}
-          </td>
-        </tr>
-        <tr>
-          <td style="font-size:0.54rem;color:#1C4055;letter-spacing:0.8px;text-transform:uppercase;
-                     padding:0.22rem 0;vertical-align:top;white-space:nowrap;padding-right:0.6rem;">
-            Context
-          </td>
-          <td style="font-size:0.6rem;color:#1C4055;padding:0.22rem 0;line-height:1.4;">
-            {CFG.PDF_ANALYSIS_CHAR_BUDGET//1000}k &nbsp;·&nbsp;
-            h {CFG.PDF_HEAD_CHARS//1000}k &nbsp;·&nbsp;
-            m {CFG.PDF_MID_CHARS//1000}k &nbsp;·&nbsp;
-            t {CFG.PDF_TAIL_CHARS//1000}k
-          </td>
-        </tr>
-        <tr>
-          <td style="font-size:0.54rem;color:#1C4055;letter-spacing:0.8px;text-transform:uppercase;
-                     padding:0.22rem 0;vertical-align:top;white-space:nowrap;padding-right:0.6rem;">
-            Retrieval
-          </td>
-          <td style="font-size:0.6rem;color:#1C4055;padding:0.22rem 0;line-height:1.4;">
-            top-{CFG.CHAT_MAX_SNIPPETS} &nbsp;×&nbsp; {CFG.CHAT_SNIPPET_CHARS//1000}k chars
-          </td>
-        </tr>
-      </table>
+      <div style="display:flex;align-items:baseline;gap:0.6rem;padding:0.22rem 0;">
+        <span style="font-size:0.54rem;color:#1C4055;letter-spacing:0.8px;text-transform:uppercase;
+                     white-space:nowrap;min-width:38%;">Model</span>
+        <span style="font-size:0.6rem;color:#1C4055;line-height:1.4;word-break:break-all;">
+          {CFG.OPENROUTER_MODEL}
+        </span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:0.6rem;padding:0.22rem 0;">
+        <span style="font-size:0.54rem;color:#1C4055;letter-spacing:0.8px;text-transform:uppercase;
+                     white-space:nowrap;min-width:38%;">Context</span>
+        <span style="font-size:0.6rem;color:#1C4055;line-height:1.4;">
+          {CFG.PDF_ANALYSIS_CHAR_BUDGET//1000}k &nbsp;·&nbsp;
+          h {CFG.PDF_HEAD_CHARS//1000}k &nbsp;·&nbsp;
+          m {CFG.PDF_MID_CHARS//1000}k &nbsp;·&nbsp;
+          t {CFG.PDF_TAIL_CHARS//1000}k
+        </span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:0.6rem;padding:0.22rem 0;">
+        <span style="font-size:0.54rem;color:#1C4055;letter-spacing:0.8px;text-transform:uppercase;
+                     white-space:nowrap;min-width:38%;">Retrieval</span>
+        <span style="font-size:0.6rem;color:#1C4055;line-height:1.4;">
+          top-{CFG.CHAT_MAX_SNIPPETS} &nbsp;×&nbsp; {CFG.CHAT_SNIPPET_CHARS//1000}k chars
+        </span>
+      </div>
       <div style="font-size:0.48rem;color:#163545;letter-spacing:0.8px;margin-top:0.5rem;">
         v{CFG.APP_VERSION} &nbsp;·&nbsp; Egis Tendly
       </div>
@@ -1909,19 +1910,17 @@ else:
             ("Ask Tendly",          "Full-document RAG Q&A — any question, any clause"),
         ]
         caps_rows = "".join(f"""
-        <tr>
-          <td style="font-family:'Urbanist',sans-serif;font-size:0.63rem;font-weight:700;
-                     text-transform:uppercase;letter-spacing:0.8px;color:#0099A5;
-                     padding:0.46rem 0.75rem 0.46rem 0;white-space:nowrap;
-                     border-bottom:1px solid rgba(22,53,69,0.6);vertical-align:middle;">
+        <div style="display:flex;align-items:center;border-bottom:1px solid rgba(22,53,69,0.6);
+                    padding:0.46rem 0;">
+          <div style="font-family:'Urbanist',sans-serif;font-size:0.63rem;font-weight:700;
+                      text-transform:uppercase;letter-spacing:0.8px;color:#0099A5;
+                      white-space:nowrap;padding-right:0.75rem;min-width:38%;">
             {tab}
-          </td>
-          <td style="font-size:0.72rem;color:#6B8F96;
-                     padding:0.46rem 0 0.46rem 0.4rem;line-height:1.45;
-                     border-bottom:1px solid rgba(22,53,69,0.6);vertical-align:middle;">
+          </div>
+          <div style="font-size:0.72rem;color:#6B8F96;line-height:1.45;padding-left:0.4rem;">
             {desc}
-          </td>
-        </tr>""" for tab, desc in CAPS)
+          </div>
+        </div>""" for tab, desc in CAPS)
         st.markdown(f"""
         <div style="background:#0C2A38;border:1px solid #163545;
                     border-top:2px solid #ABC022;border-radius:2px;padding:1rem 1.2rem 0.5rem;">
@@ -1929,7 +1928,7 @@ else:
                       letter-spacing:3px;text-transform:uppercase;color:#ABC022;margin-bottom:0.75rem;">
             What Tendly Extracts
           </div>
-          <table style="width:100%;border-collapse:collapse;">{caps_rows}</table>
+          <div style="width:100%;">{caps_rows}</div>
         </div>
         <div style="font-family:'Urbanist',sans-serif;font-size:0.48rem;letter-spacing:2.5px;
                     color:#163545;text-transform:uppercase;margin-top:0.9rem;text-align:right;">
@@ -2456,7 +2455,7 @@ if uploaded_file:
             st.markdown("""
             <div style="font-size:0.81rem;color:#5d858b;margin-bottom:1rem;line-height:1.72;">
             Ask anything about this tender. Answers are grounded in the most relevant pages of the
-            document — not just the first few pages. Sources are shown after each response.
+            document — Sources are shown after each response.
             </div>
             """, unsafe_allow_html=True)
 
@@ -2625,16 +2624,3 @@ if uploaded_file:
             height=380,
             label_visibility="collapsed",
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
