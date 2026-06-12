@@ -1114,7 +1114,6 @@ st.markdown("""
   </div>
   <div class="egis-motto-block">
     <div class="egis-motto-line">IMAGINE &nbsp;·&nbsp; CREATE &nbsp;·&nbsp; <span class="highlight">ACHIEVE</span></div>
-    <div class="egis-motto-tag">Egis Group</div>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -2133,7 +2132,7 @@ else:
     st.markdown("""
     <div class="landing-foot">
       Imagine &nbsp;·&nbsp; Create &nbsp;·&nbsp; <span class="highlight">Achieve</span>
-      &nbsp;&nbsp;—&nbsp;&nbsp; Egis Group
+      
     </div>
     """, unsafe_allow_html=True)
 
